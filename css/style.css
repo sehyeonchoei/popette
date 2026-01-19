@@ -146,13 +146,16 @@ body {
 .gnb a {
     font-size: 1.2rem;
     font-weight: bold;
-    /* letter-spacing: 0.1em; */
     color: #111;
     transition: color 0.3s ease;
 }
 
 .gnb a:hover {
     color: #A6D7FF;
+}
+
+.header_submenu {
+    display: none;
 }
 
 /* 좌우 분할 */
@@ -174,8 +177,8 @@ body {
 /* 왼쪽: 이미지 영역 */
 .banner_image {
     position: relative;
-    overflow: hidden;
-    /* background-color: #e8e8e8; */
+    /* overflow: hidden; */
+    overflow: visible !important;
     height: 100vh;
 }
 
@@ -188,12 +191,56 @@ body {
 
 .logo {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    top: 86%;
+    left: calc(50% - 2px);
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 100%;
+    text-align: center;
 }
 
-.logo img {
-    width: 96%;
+.logo h1.tablet {
+    display: none;
+}
+
+.logo h1.pc {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    /* 글자 아래쪽 라인을 맞춤 */
+    gap: 0;
+    /* 이미지 사이 간격 조절 */
+}
+
+.logo-container {
+    position: relative;
+    /* 자식 요소들의 기준점 */
+    display: inline-block;
+    width: 97%;
+    /* 전체 로고 크기 조절 */
+    max-width: 1000px;
+    overflow: visible;
+}
+
+.base-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.logo_o {
+    position: absolute;
+    /* ★ 이 수치들을 조절해서 o를 원래 빈자리에 딱 맞추세요 */
+    top: 32%;
+    left: 17.5%;
+    width: 16%;
+    /* p_pette 전체 너비 대비 o의 비율 */
+    z-index: 10;
+}
+
+.logo_o svg {
+    width: 100%;
+    height: auto;
 }
 
 /* 오른쪽: 텍스트 영역 */
@@ -212,7 +259,7 @@ body {
 }
 
 .banner_text p {
-    line-height: 1.3;
+    line-height: 1.5;
     color: #111;
     word-break: keep-all;
     font-weight: 400;
@@ -223,6 +270,7 @@ body {
 
     .header {
         height: 52px;
+
     }
 
     .gnb {
@@ -240,9 +288,27 @@ body {
     }
 
     .logo {
-        /* width: 70%; */
-        bottom: 35vh;
-        left: 7%;
+        top: 50% !important;
+        left: 50% !important;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+    }
+
+    .logo h1.pc {
+        display: none;
+    }
+
+    .logo h1.tablet {
+        display: block;
+    }
+
+    .logo h1.tablet img {
+        width: 67%;
+        height: auto;
+        display: inline-block;
+        position: relative;
     }
 
     .banner {
@@ -262,6 +328,51 @@ body {
 @media (max-width: 767px) {
     .header {
         height: 48px;
+        position: fixed;
+        transition: background-color 0.3s ease;
+    }
+
+    .header.scrolled {
+        background-color: #fafaf8;
+        border-bottom: 1px solid #999;
+    }
+
+    /* 1. SHOP 메뉴를 포함한 상위 리스트 설정 */
+    .gnb {
+        position: relative; /* 서브메뉴의 기준점 */
+    }
+
+    /* 2. 서브메뉴 기본 상태 (숨김) */
+    .header_submenu {
+        display: none; 
+        position: absolute;
+        top: 48px; /* 헤더 높이만큼 아래로 */
+        left: 0;
+        width: 100%;
+        background-color: #fafaf8;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+        z-index: 1000;
+        
+        /* Flex 설정 */
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        list-style: none;
+        margin: 0;
+    }
+
+    /* 3. 클릭 시 active 클래스가 붙었을 때 노출 */
+    .has_submenu.active .header_submenu {
+        display: flex; /* 보이기 */
+    }
+
+    /* 서브메뉴 개별 아이템 스타일 */
+    .header_submenu_item a {
+        font-size: 0.9rem;
+        color: #333;
+        padding: 5px 10px;
     }
 
     .gnb_right a {
@@ -269,9 +380,14 @@ body {
     }
 
     .logo {
-        width: 70%;
-        bottom: calc(50vh - 48px);
-        left: 15%;
+        width: 100%;
+        left: 50% !important;
+        top: 50% !important;
+    }
+
+    .logo h1.tablet img {
+        width: 67%;
+        left: 0;
     }
 
     .banner_text {
@@ -287,19 +403,20 @@ body {
 /* flow */
 .flow {
     max-width: 100%;
-    height: 45px;
-    background-color: #fff;
+    height: 40px;
+    background-color: #e3f3ff;
     padding: 0 50px;
+    align-items: center;
 }
 
 .flow img {
     width: 100%;
+    align-items: center;
 }
 
 /* product list */
 .inner_product {
     max-width: 100%;
-    /* 좌우분할 */
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -311,20 +428,22 @@ body {
     top: 0;
     width: 30%;
     height: 100vh;
-    flex-shrink: 0;   /* 왼쪽 영역이 줄어들지 않도록 설정 */
+    flex-shrink: 0;
+    /* 왼쪽 영역이 줄어들지 않도록 설정 */
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 상하단 양 끝으로 배치 */
+    justify-content: space-between;
+    /* 상하단 양 끝으로 배치 */
     border-right: 1px solid #999;
 }
 
 .section_title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     font-weight: 600;
     text-align: left;
     color: #111;
     margin-top: 50px;
-   margin-left: 50px;
+    margin-left: 50px;
 }
 
 /* 추가 gnb */
@@ -335,29 +454,116 @@ body {
 }
 
 .gnb_item {
-    font-size: 2.2rem;
-    font-weight: 600;
     border-top: 1px solid #999;
-    padding: 15px 40px;
+}
+
+.gnb_header {
+    font-size: 2.4rem;
+    font-weight: 600;
+    padding: 15px 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 
-.gnb_item .plus, .gnb_item .count {
-    font-size: 1.8rem;
+.gnb_header .plus {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.gnb_header .plus .line {
+    position: absolute;
+    background-color: #333;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.gnb_header .plus .line-horizontal {
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.gnb_header .plus .line-vertical {
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+.gnb_item.active .plus .line-vertical {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+}
+
+.gnb_header .count {
+    font-size: 1.6rem;
     font-weight: 300;
 }
 
-.product_content_area {
-   flex-grow: 1;     /* 남은 공간을 리스트가 다 채우도록 설정 */
+.submenu {
+    list-style: none;
+    padding: 0 40px;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+    background-color: #f8f8f8;
+    opacity: 0;
 }
 
-/* Product Grid - 2x2 레이아웃 */
+.gnb_item.active .submenu {
+    max-height: 500px;
+    padding: 0px 40px 20px;
+    opacity: 1;
+}
+
+.submenu_item {
+    display: inline-block;
+    margin-right: 30px;
+    font-size: 1.5rem;
+    font-weight: 400;
+    transform: translateY(-10px);
+    transition: transform 0.5s ease 0.1s;
+}
+
+.gnb_item.active .submenu_item {
+    transform: translateY(0);
+}
+
+.submenu_item:last-child {
+    margin-right: 0;
+}
+
+.submenu_item a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.submenu_item a:hover {
+    color: #111;
+}
+
+.submenu_item.on a {
+    color: #111;
+    font-weight: 500;
+}
+
+/* product */
+.product_content_area {
+    flex-grow: 1;
+    /* 남은 공간을 리스트가 다 채우도록 설정 */
+}
+
 .product_grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin-bottom: 80px;
 }
 
 .product_item {
@@ -372,7 +578,6 @@ body {
 .product_thumb {
     position: relative;
     overflow: hidden;
-    background-color: #fff;
     max-width: 100%;
 }
 
@@ -409,22 +614,22 @@ body {
     letter-spacing: -0.02em;
 }
 
-/* Pagination */
+/* pagination */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 40px;
+    margin: 20px 0;
 }
 
 .pagination a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
+    min-width: 30px;
     height: 40px;
-    padding: 0 12px;
+    padding: 0 4px;
     font-size: 0.9rem;
     color: #666;
     transition: all 0.3s ease;
@@ -442,55 +647,59 @@ body {
 
 .page_btn {
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: -0.03em;
     color: #111 !important;
     margin-right: 10px;
 }
 
 /* tablet */
 @media (max-width: 1199px) {
-    .inner_product {
-        padding: 0 60px 0 calc(30% + 60px);
-        /* 좌측 30%로 축소 */
+
+    .section_title {
+        margin-top: 50px;
+        margin-left: 50px;
+        font-size: 1.8rem;
+    }
+
+    .submenu_item {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .submenu_item:last-child {
+        margin-bottom: 0;
+    }
+
+    .gnb_header {
+        font-size: 2rem;
+        padding: 15px 30px;
     }
 
     .product_grid {
-        gap: 30px 40px;
-    }
-
-    .section_title {
-        font-size: 1.8rem;
-        margin-bottom: 50px;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 /* mobile*/
 @media (max-width: 767px) {
-    .product_list {
-        padding: 60px 0;
-    }
-
     .inner_product {
-        padding: 0 20px;
-        /* 모바일에서는 좌측 여백 제거 */
+        display: block;
     }
 
-    .section_title {
-        text-align: center;
-        /* 모바일에서는 중앙 정렬 */
-    }
-
-    /* 모바일: 1열 */
-    .product_grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        margin-bottom: 60px;
+    .section_title_area {
+        display: none;
     }
 
     .section_title {
         font-size: 1.5rem;
-        margin-bottom: 40px;
     }
+
+    .product_grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
 
     .product_name {
         font-size: 1rem;
@@ -510,5 +719,137 @@ body {
         min-width: 36px;
         height: 36px;
         font-size: 0.85rem;
+    }
+}
+
+/* faq */
+.faq_section {
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    background-color: #fffff0;
+    padding: 60px 0;
+}
+
+.faq_container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 60px;
+}
+
+.faq_title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    min-width: 150px;
+}
+
+.faq_list {
+    flex: 1;
+}
+
+.faq_item {
+    border-top: 1px solid #999;
+}
+
+.faq_item:last-child {
+    border-bottom: 1px solid #999;
+}
+
+.faq_question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.faq_question h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.faq_item.active .faq_question {
+    padding-bottom: 10px;
+}
+
+.faq_arrow {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid #333;
+    border-bottom: 1.5px solid #333;
+    transform: rotate(45deg);
+    transition: transform 0.4s ease-in-out;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+
+.faq_item.active .faq_arrow {
+    transform: rotate(-135deg);
+}
+
+.faq_answer {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.4s ease-in-out,
+        opacity 0.4s ease-in-out,
+        transform 0.4s ease-in-out,
+        padding 0.4s ease-in-out;
+}
+
+.faq_item.active .faq_answer {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    padding-bottom: 20px;
+}
+
+.faq_answer p {
+    font-size: 1.2rem;
+    line-height: 1.2;
+    color: #666;
+    margin: 0;
+    font-weight: 400;
+}
+
+
+/* tablet */
+@media (max-width: 1199px) {
+
+    .faq_container {
+        width: 80%;
+        gap: 30px;
+    }
+}
+
+/* mobile*/
+@media (max-width: 767px) {
+    .faq_section {
+        padding: 40px 0;
+    }
+
+    .faq_container {
+        display: block;
+    }
+
+    .faq_title {
+        margin-bottom: 30px;
+    }
+
+    .faq_question {
+        padding: 10px 0;
+    }
+
+    .faq_question h3 {
+        font-size: 1.2rem;
+    }
+
+    .faq_answer p {
+        font-size: 1rem;
     }
 }
