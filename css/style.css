@@ -337,42 +337,68 @@ body {
         border-bottom: 1px solid #999;
     }
 
-    /* 1. SHOP 메뉴를 포함한 상위 리스트 설정 */
+    /* SHOP 메뉴를 포함한 상위 리스트 설정 */
     .gnb {
-        position: relative; /* 서브메뉴의 기준점 */
+        position: relative;
+        /* 서브메뉴의 기준점 */
     }
 
-    /* 2. 서브메뉴 기본 상태 (숨김) */
+    .gnb_right {
+        padding: 0 15px;
+    }
+
+    /* SHOP 메뉴가 활성화(active) 되었을 때 글자 색상 유지 */
+    .gnb_right .has_submenu.active>a {
+        color: #A6D7FF;
+    }
+
+    .has_submenu {
+        position: static;
+    }
+
+    /* 서브메뉴 기본 상태 (숨김) */
     .header_submenu {
-        display: none; 
+        display: none;
         position: absolute;
-        top: 48px; /* 헤더 높이만큼 아래로 */
+        top: 49px;
+        /* 헤더 높이만큼 아래로 */
         left: 0;
         width: 100%;
         background-color: #fafaf8;
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
+        border-bottom: 1px solid #999;
+        padding: 10px 50px;
         z-index: 1000;
-        
         /* Flex 설정 */
+
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 15px;
+        gap: 50px;
         list-style: none;
         margin: 0;
     }
 
-    /* 3. 클릭 시 active 클래스가 붙었을 때 노출 */
+    /* 클릭 시 active 클래스가 붙었을 때 노출 */
     .has_submenu.active .header_submenu {
-        display: flex; /* 보이기 */
+        display: flex;
+        /* 보이기 */
     }
 
     /* 서브메뉴 개별 아이템 스타일 */
     .header_submenu_item a {
         font-size: 0.9rem;
-        color: #333;
+        font-weight: 400;
+        color: #999;
         padding: 5px 10px;
+    }
+
+    .header_submenu_item a:hover {
+        font-weight: 500;
+        color: #A6D7FF;
+    }
+
+    .header_submenu_item a.on {
+        color: #A6D7FF;
     }
 
     .gnb_right a {
@@ -558,7 +584,7 @@ body {
 /* product */
 .product_content_area {
     flex-grow: 1;
-    /* 남은 공간을 리스트가 다 채우도록 설정 */
+    /* 남은 공간을 product list가 다 채우도록 */
 }
 
 .product_grid {
@@ -699,7 +725,9 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
-
+    .product_info {
+        margin: 20px 0 50px 20px;
+    }
 
     .product_name {
         font-size: 1rem;
@@ -830,7 +858,7 @@ body {
 /* mobile*/
 @media (max-width: 767px) {
     .faq_section {
-        padding: 40px 0;
+        padding: 30px 0;
     }
 
     .faq_container {
@@ -838,7 +866,7 @@ body {
     }
 
     .faq_title {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
     .faq_question {
@@ -846,10 +874,10 @@ body {
     }
 
     .faq_question h3 {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .faq_answer p {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 }

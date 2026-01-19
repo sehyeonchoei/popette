@@ -69,18 +69,31 @@ if (window.innerWidth >= 1200) {
     });
 }
 
-// 모바일에서 header 스크롤 시 배경 변경
-const header = document.querySelector('.header');
+// mobile에서 스크롤 시 header 변경
+$(document).ready(function() {
+    const $header = $('.header');
+    const $hasSubmenu = $('.has_submenu');
 
-if (window.innerWidth <= 767 && header) {
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+    $(window).on('scroll', function() {
+        let currentScroll = $(window).scrollTop();
+        let windowWidth = $(window).width();
+
+        // 1. 특정 높이(500px) 이하로 올라가면 서브메뉴 닫기
+        // 오타 수정: rmoveClass -> removeClass
+        if (currentScroll <= 880) { 
+            $hasSubmenu.removeClass('active');
+        }
+
+        // 2. 모바일(767px 이하) 헤더 배경 변경 로직
+        if (windowWidth <= 767) {
+            if (currentScroll > 300) {
+                $header.addClass('scrolled');
+            } else {
+                $header.removeClass('scrolled');
+            }
         }
     });
-}
+});
 
 // has_submenu 클릭 토글
 const hasSubmenu = document.querySelector('.has_submenu');
@@ -104,6 +117,23 @@ if (hasSubmenu) {
         hasSubmenu.classList.remove('active');
     });
 }
+
+
+// submenu on
+$(document).ready(function() {
+    // 서브메뉴 내부의 a 태그 클릭 시
+    $('.header_submenu_item a').on('click', function() {
+        // 모든 서브메뉴 링크에서 'on' 클래스 제거
+        $('.header_submenu_item a').removeClass('on');
+        
+        // 방금 클릭한 요소에만 'on' 클래스 추가
+        $(this).addClass('on');
+        
+        // (참고) 만약 클릭 시 바로 페이지가 이동된다면, 
+        // 새 페이지가 로드될 때 이 클래스가 초기화될 수 있습니다.
+        // 현재는 한 페이지 내에서 동작하는 경우를 가정합니다.
+    });
+});
 
 
 // 추가 gnb
@@ -157,6 +187,55 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// pagination
+$(document).ready(function() {
+    const itemsPerPage = 6; // 한 페이지당 아이템 수
+    const $products = $('.product_item'); // 전체 상품 아이템
+    const $pagination = $('.page_num'); // 페이지 번호 버튼들
+
+    function showPage(pageNumber) {
+        // 1. 모든 상품 일단 숨기기
+        $products.hide();
+
+        // 2. 보여줄 인덱스 계산 (0부터 시작)
+        // 1페이지: 0~5, 2페이지: 6~11 ...
+        const start = (pageNumber - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        // 3. 해당 범위의 상품만 보이기
+        $products.slice(start, end).fadeIn(300);
+
+        // 4. 페이지 번호 활성화 스타일 처리
+        $pagination.removeClass('active');
+        $pagination.eq(pageNumber - 1).addClass('active');
+    }
+
+    // 초기 실행: 1페이지 보여주기
+    showPage(1);
+
+    // 페이지 번호 클릭 이벤트
+    $pagination.on('click', function(e) {
+        e.preventDefault();
+        const targetPage = parseInt($(this).text());
+        showPage(targetPage);
+        
+        // 클릭 시 상단으로 부드럽게 이동 (선택 사항)
+        $('html, body').animate({ scrollTop: $('#product_list').offset().top - 100 }, 500);
+    });
+
+    // Prev, Next 버튼 로직 (추가 구현 가능)
+    $('.page_btn.prev').on('click', function(e) {
+        e.preventDefault();
+        const current = $('.page_num.active').text();
+        if (current > 1) showPage(parseInt(current) - 1);
+    });
+
+    $('.page_btn.next').on('click', function(e) {
+        e.preventDefault();
+        const current = $('.page_num.active').text();
+        if (current < $pagination.length) showPage(parseInt(current) + 1);
+    });
+});
 
 // faq
 document.addEventListener('DOMContentLoaded', function () {
