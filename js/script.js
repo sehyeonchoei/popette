@@ -69,71 +69,38 @@ if (window.innerWidth >= 1200) {
     });
 }
 
-// mobile에서 스크롤 시 header 변경
-$(document).ready(function() {
+// header
+$(document).ready(function () {
     const $header = $('.header');
-    const $hasSubmenu = $('.has_submenu');
 
-    $(window).on('scroll', function() {
+    $(window).on('scroll', function () {
         let currentScroll = $(window).scrollTop();
         let windowWidth = $(window).width();
 
-        // 1. 특정 높이(500px) 이하로 올라가면 서브메뉴 닫기
-        // 오타 수정: rmoveClass -> removeClass
-        if (currentScroll <= 880) { 
-            $hasSubmenu.removeClass('active');
-        }
-
-        // 2. 모바일(767px 이하) 헤더 배경 변경 로직
+        // 모바일(767px 이하)에서만 스크롤 위치에 따라 클래스 추가/제거
         if (windowWidth <= 767) {
-            if (currentScroll > 300) {
+            if (currentScroll > 880) {
                 $header.addClass('scrolled');
             } else {
                 $header.removeClass('scrolled');
             }
+        } else {
+            // PC 버전으로 돌아왔을 때 클래스 제거 (필요시)
+            $header.removeClass('scrolled');
         }
     });
 });
 
-// has_submenu 클릭 토글
-const hasSubmenu = document.querySelector('.has_submenu');
-const shopLink = hasSubmenu.querySelector('a'); // SHOP 버튼
 
-if (hasSubmenu) {
-    hasSubmenu.addEventListener('click', function (e) {
-        // 하위 메뉴 내부의 링크를 클릭했을 때는 닫히지 않게 전파 방지
-        if (e.target.closest('.header_submenu')) {
-            e.stopPropagation();
-            return; 
-        }
+// flow
+const wrapper = document.querySelector('.flow_wrapper');
+const clone = wrapper.innerHTML;
 
-        e.preventDefault();
-        e.stopPropagation();
-        this.classList.toggle('active');
-    });
+// 콘텐츠를 한 번 더 추가하여 끊김 방지
+wrapper.innerHTML += clone;
 
-    // 바깥 영역 클릭 시 메뉴 닫기
-    document.addEventListener('click', function () {
-        hasSubmenu.classList.remove('active');
-    });
-}
-
-
-// submenu on
-$(document).ready(function() {
-    // 서브메뉴 내부의 a 태그 클릭 시
-    $('.header_submenu_item a').on('click', function() {
-        // 모든 서브메뉴 링크에서 'on' 클래스 제거
-        $('.header_submenu_item a').removeClass('on');
-        
-        // 방금 클릭한 요소에만 'on' 클래스 추가
-        $(this).addClass('on');
-        
-        // (참고) 만약 클릭 시 바로 페이지가 이동된다면, 
-        // 새 페이지가 로드될 때 이 클래스가 초기화될 수 있습니다.
-        // 현재는 한 페이지 내에서 동작하는 경우를 가정합니다.
-    });
-});
+// 만약 텍스트가 짧아 화면이 빈다면 여러 번 복제 가능
+wrapper.innerHTML += clone;
 
 
 // 추가 gnb
@@ -188,24 +155,24 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // pagination
-$(document).ready(function() {
+$(document).ready(function () {
     const itemsPerPage = 6; // 한 페이지당 아이템 수
     const $products = $('.product_item'); // 전체 상품 아이템
     const $pagination = $('.page_num'); // 페이지 번호 버튼들
 
     function showPage(pageNumber) {
-        // 1. 모든 상품 일단 숨기기
+        // 모든 상품  숨기기
         $products.hide();
 
-        // 2. 보여줄 인덱스 계산 (0부터 시작)
+        // 보여줄 인덱스 계산 (0부터 시작)
         // 1페이지: 0~5, 2페이지: 6~11 ...
         const start = (pageNumber - 1) * itemsPerPage;
         const end = start + itemsPerPage;
 
-        // 3. 해당 범위의 상품만 보이기
+        // 해당 범위의 상품만 보이기
         $products.slice(start, end).fadeIn(300);
 
-        // 4. 페이지 번호 활성화 스타일 처리
+        // 페이지 번호 활성화 스타일 처리
         $pagination.removeClass('active');
         $pagination.eq(pageNumber - 1).addClass('active');
     }
@@ -213,24 +180,35 @@ $(document).ready(function() {
     // 초기 실행: 1페이지 보여주기
     showPage(1);
 
-    // 페이지 번호 클릭 이벤트
-    $pagination.on('click', function(e) {
+    $pagination.on('click', function (e) {
         e.preventDefault();
         const targetPage = parseInt($(this).text());
         showPage(targetPage);
-        
-        // 클릭 시 상단으로 부드럽게 이동 (선택 사항)
-        $('html, body').animate({ scrollTop: $('#product_list').offset().top - 100 }, 500);
+
+        // 1. 현재 화면 너비 확인
+        const isMobile = window.innerWidth <= 767;
+        let targetTop;
+
+        if (isMobile) {
+            // 2. 모바일: 가로 서브메뉴(All, Best...)가 가려지지 않게 여유 있게 이동
+            // 서브메뉴가 포함된 컨테이너의 상단으로 이동하는 것이 좋습니다.
+            targetTop = $('#product_list').offset().top - 48;
+        } else {
+            // 3. PC: 왼쪽 메뉴는 고정되어 있으므로, 제품 그리드의 시작점에 딱 맞춤
+            targetTop = $('#product_list').offset().top - 0;
+        }
+
+        $('html, body').animate({ scrollTop: targetTop }, 500);
     });
 
-    // Prev, Next 버튼 로직 (추가 구현 가능)
-    $('.page_btn.prev').on('click', function(e) {
+    // Prev, Next 버튼
+    $('.page_btn.prev').on('click', function (e) {
         e.preventDefault();
         const current = $('.page_num.active').text();
         if (current > 1) showPage(parseInt(current) - 1);
     });
 
-    $('.page_btn.next').on('click', function(e) {
+    $('.page_btn.next').on('click', function (e) {
         e.preventDefault();
         const current = $('.page_num.active').text();
         if (current < $pagination.length) showPage(parseInt(current) + 1);
@@ -260,3 +238,104 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+// 커서 변경
+const canvas = document.getElementById('firework-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 4 + 1;
+        this.vx = Math.cos(angle) * velocity;
+        this.vy = Math.sin(angle) * velocity;
+
+        this.opacity = 1;
+        this.life = Math.random() * 0.02 + 0.015;
+        this.size = Math.random() * 1 + 0.2;
+
+        // 짧은 꼬리를 위한 히스토리
+        this.trail = [];
+        this.trailLength = 8;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+
+        // 짧은 꼬리 그리기
+        if (this.trail.length > 1) {
+            ctx.beginPath();
+            ctx.moveTo(this.trail[0].x, this.trail[0].y);
+            for (let i = 1; i < this.trail.length; i++) {
+                ctx.lineTo(this.trail[i].x, this.trail[i].y);
+            }
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = this.size * 1.3;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        // 입자
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    update() {
+        // 현재 위치를 히스토리에 추가
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > this.trailLength) {
+            this.trail.shift();
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.96;
+        this.vy *= 0.96;
+        this.vy += 0.12;
+        this.opacity -= this.life;
+    }
+}
+
+let particles = [];
+const fireworkColors = ['#adddff', '#ffff76'];
+
+function createFirework(x, y) {
+    const count = 25;
+    // 랜덤하게 두 색상 중 하나 선택
+    const color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+    for (let i = 0; i < count; i++) {
+        particles.push(new Particle(x, y, color));
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.opacity > 0);
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animate);
+}
+
+window.addEventListener('mousedown', (e) => {
+    createFirework(e.clientX, e.clientY);
+});
+
+animate();
