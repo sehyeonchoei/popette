@@ -1021,7 +1021,13 @@ body {
     color: #111;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199px) {
+    .inner_notice {
+        width: 80%;
+    }
+}
+
+@media (max-width: 767px) {
     .slide {
         height: 300px;
     }
@@ -1053,7 +1059,7 @@ body {
 }
 
 .footer_box {
-    padding: 40px;
+    padding: 20px;
     border-right: 1px solid #999;
     border-bottom: 1px solid #999;
 }
@@ -1110,27 +1116,37 @@ body {
     .footer_box:nth-child(1) {
         border-right: 1px solid #999;
         border-bottom: 1px solid #999;
+        padding: 15px 20px;
     }
 
     .footer_box:nth-child(2) {
         border-right: none;
         border-bottom: 1px solid #999;
+        padding: 15px 20px;
     }
 
     .footer_box:nth-child(3) {
         grid-column: 1 / span 2;
         /* 2칸을 혼자 다 차지하도록 */
         border-right: none;
-        padding: 30px 20px;
+        padding: 15px 20px;
     }
 
-    .footer_box {
-        padding: 20px;
+
+    .footer_menu li {
+        margin-bottom: 0;
     }
 
     .company_info p {
         font-size: 11px;
+        margin: 0;
     }
+
+    .footer_bottom {
+        padding: 10px 0;
+        text-align: center;
+    }
+
 }
 
 /* 폭죽 캔버스 설정 */
