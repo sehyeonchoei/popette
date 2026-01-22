@@ -377,39 +377,26 @@ body {
 /* flow */
 .flow {
     background-color: #EBF4FF;
-    padding: 5px 0;
+    padding: 7px 0;
     overflow: hidden;
-    white-space: nowrap;
-    /* 글자 줄바꿈 방지 */
     display: flex;
-    /* border-top: 1px solid #999; */
+    border-top: 1px solid #999;
     border-bottom: 1px solid #999;
 }
 
 .flow_wrapper {
     display: flex;
     flex-shrink: 0;
-    /* JS에서 복제되므로 전체의 -50%까지 이동하면 무한루프 */
-    animation: marquee 50s linear infinite;
+    white-space: nowrap;
+    /* 텍스트 가로 정렬 보장 */
+    will-change: transform;
+    /* 애니메이션 성능 최적화 */
+    animation: marquee 40s linear infinite;
 }
 
 .flow_item {
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.flow_item .pop {
-    color: #C4E2F8;
-    /* color: #111; */
-}
-
-.flow_item .ette {
-    color: #ccc;
-    /* color: #111; */
-
+    padding: 0 50px;
+    font-size: 14px;
 }
 
 @keyframes marquee {
@@ -418,7 +405,7 @@ body {
     }
 
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-33.333%);
     }
 
     /* 전체 길이의 절반만큼 이동 */
@@ -804,22 +791,17 @@ body {
     /* 숨겨둔 서브메뉴 상시 노출 및 가로 배치 */
     .submenu {
         display: flex !important;
+        flex-wrap: wrap;
         justify-content: center;
         max-height: none !important;
         opacity: 1 !important;
-        overflow-x: auto;
-        white-space: nowrap;
-        padding: 10px 0 !important;
-        gap: 60px;
+        overflow: visible;
+        padding: 15px 20px !important;
+        gap: 10px 40px;
         background-color: #fafaf8;
         border-top: 1px solid #999;
         border-bottom: 1px solid #999;
         align-items: center;
-    }
-
-    .submenu::-webkit-scrollbar {
-        display: none;
-        /* 크롬 스크롤바 숨김 */
     }
 
     .submenu_item {
@@ -829,6 +811,7 @@ body {
         /* 기존 애니메이션 무효화 */
         flex-shrink: 0;
         /* 텍스트 압축 방지 */
+        width: auto;
     }
 
     .submenu_item a {
@@ -838,7 +821,7 @@ body {
         /* 클릭 영역 확보를 위해 block 권장 */
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-        line-height: 1;
+        line-height: 1.2;
         /* 글자 높이를 최소화하여 위아래 여백 제거 */
         margin: 0;
     }
@@ -1159,4 +1142,42 @@ body {
     pointer-events: none;
     /* 클릭을 방해하지 않음 */
     z-index: 10000;
+}
+/* top btn */
+#topBtn {
+    display: none;        /* 초기에는 무조건 숨김 */
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;  
+    width: 50px;
+    height: 50px;
+    background-color: #fafaf8;
+    border: 1px solid #999;
+    outline: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* 중앙 정렬 설정 (보여질 때 적용될 스타일) */
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#topBtn img {
+    width: 20px;
+    height: 20px;
+}
+
+#topBtn:hover {
+  transform: translateY(-5px); /* 호버 시 살짝 위로 뜨는 효과 (선택사항) */
+}
+
+@media (max-width: 767px) {
+    #topBtn {
+       bottom: 20px;
+    right: 15px;
+    }
+    
 }

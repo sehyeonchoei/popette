@@ -378,7 +378,7 @@ $(document).ready(function () {
     }
 
     let particles = [];
-    const fireworkColors = ['#adddff', '#ffff76'];
+    const fireworkColors = ['#adddff'];
 
     function createFirework(x, y) {
         const count = 25;
@@ -396,3 +396,36 @@ $(document).ready(function () {
     window.addEventListener('mousedown', (e) => createFirework(e.clientX, e.clientY));
     animate();
 })();
+
+// [8] top btn
+// JavaScript: 스크롤 동작 제어
+ const topBtn = document.getElementById("topBtn");
+
+function scrollFunction() {
+    // 현재 스크롤 위치 확인
+    const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+    
+    if (scrollTop > 500) {
+        topBtn.style.display = "flex"; // block 대신 flex로 변경 (중앙정렬 유지)
+    } else {
+        topBtn.style.display = "none";
+    }
+}
+
+// 1. 사용자가 스크롤을 할 때 실행
+window.onscroll = function() {
+    scrollFunction();
+};
+
+// 2. [추가] 새로고침 시 페이지 로드가 완료되었을 때 실행
+window.onload = function() {
+    scrollFunction();
+};
+
+// 버튼 클릭 시 최상단으로 이동
+topBtn.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
