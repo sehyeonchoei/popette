@@ -163,10 +163,9 @@ body {
 .main {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+height: 100vh;
     background-color: #fafaf8;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow:hidden;
 }
 
 .banner {
@@ -180,8 +179,8 @@ body {
 /* 왼쪽: 이미지 영역 */
 .banner_image {
     position: relative;
-    /* overflow: hidden; */
-    overflow: visible !important;
+    overflow: hidden;
+    /* overflow: visible !important; */
     height: 100vh;
 }
 

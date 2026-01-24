@@ -45,17 +45,17 @@ if (window.innerWidth >= 1200) {
 
     // 오른쪽에서 날아오기
     gsap.from(".logo_o", {
-        x: "100vw",
+        x: "40vw",
         duration: 3,
         ease: "power1.out",
-        delay: 0.5
+        delay: 0.3
     });
 
     // 위아래로 통통 튀는 타임라인
     const tl = gsap.timeline({ delay: 0.5 });
-    tl.to(".logo_o", { y: -250, duration: 0.45, ease: "power2.out" })
+    tl.to(".logo_o", { y: -230, duration: 0.45, ease: "power2.out" })
         .to(".logo_o", { y: 0, duration: 0.45, ease: "power2.in" })
-        .to(".logo_o", { y: -230, duration: 0.5, ease: "power2.out" })
+        .to(".logo_o", { y: -200, duration: 0.5, ease: "power2.out" })
         .to(".logo_o", { y: 0, duration: 0.5, ease: "power2.in" })
         .to(".logo_o", { y: -90, duration: 0.35, ease: "power2.out" })
         .to(".logo_o", { y: 0, duration: 0.35, ease: "power2.in" })
@@ -66,9 +66,9 @@ if (window.innerWidth >= 1200) {
 
     // 회전 효과
     gsap.from(".logo_o", {
-        rotation: 1440,
+        rotation: 720,
         duration: 3,
-        delay: 0.5
+        delay: 0.3
     });
 }
 
