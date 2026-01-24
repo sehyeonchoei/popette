@@ -166,6 +166,7 @@ body {
     min-height: 100vh;
     background-color: #fafaf8;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .banner {
@@ -189,6 +190,7 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    box-sizing: border-box;
 }
 
 .logo {
